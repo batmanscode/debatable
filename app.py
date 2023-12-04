@@ -1,4 +1,7 @@
+import os
 import streamlit as st
+from trubrics.integrations.streamlit import FeedbackCollector
+import ulid
 
 from debatable import complete_suggestions
 
@@ -6,19 +9,6 @@ from debatable import complete_suggestions
 st.set_page_config(page_title="Debatable", page_icon="💡", initial_sidebar_state="auto", layout="wide")
 
 st.title("Debatable 💡")
-# st.write(
-#     """
-#     #### **:blue[Talk about your bra problems, see what issues other people have and run surveys for your bra ideas!]**
-
-
-#     How to use:
-#     1. Have a chat 💬 :grey[- the bot will let you know when it's done but if it's taking too long, just say end the convo]
-#     2. Please wait while your report is being generated ❤️ :grey[- under 10 seconds ⏲]
-#     2. Check the sidebar (top left) to see the report 📋 :grey[- the bot will tell you when it's written!]
-#     3. Leave a rating ⭐️
-#     4. See the stats page to see things like the most common problems and frequently mentioned brands 🔍
-#     """
-# )
 st.write(
     """
     #### **:blue[Get expert responses to any sales objections you get]**
@@ -69,21 +59,78 @@ with col2:
     email = st.text_area("Email", placeholder=EMAIL_PLACEHOLDER, height=200, value=st.session_state["email_placeholder"])
 
 
+#### SET UP FEEDBACK COLLECTION
+# https://github.com/trubrics/streamlit-feedback
+# https://trubrics.github.io/trubrics-sdk/integrations/streamlit
+
+# create a session ID so feedback and prompts can be aggregated by each user or use of the app
+if "session_ulid" not in st.session_state:
+    st.session_state["session_ulid"] = ulid.new().str
+
+# authenticate with trubrics
+@st.cache_data
+def init_trubrics(email, password):
+    try:
+        collector = FeedbackCollector(email=email, password=password, project="debatable_streamlit")
+        return collector
+    except Exception:
+        st.error(f"Error authenticating '{email}' with [Trubrics](https://trubrics.streamlit.app/). Please try again.")
+        st.stop()
+
+collector = init_trubrics(email=os.environ["TRUBRICS_EMAIL"], password=os.environ["TRUBRICS_PASSWORD"])
+
+# when there's multiple uses per session, this will keep track
+if "feedback_key" not in st.session_state:
+    st.session_state.feedback_key = 0
+
+### END FEEDBACK COLLECTION SETUP
+
+
+# keep showing text when page gets rerun after saving feedback
+if "dict_output" not in st.session_state:
+    st.session_state.dict_output = {}
+
 # nice big button
 if st.button("Get Suggestions", type="primary", use_container_width=True):
     # run the model
     with st.spinner("Generating suggestions..."):
         # st.write("hi :3")
-        dict_output = complete_suggestions(email, product_context)
+        st.session_state.dict_output = complete_suggestions(email, product_context)
+        st.session_state.feedback_key += 1
 
         # st.write(f"**Email**: \n{email}\n\n")
         # st.write(f"*Product Info*: \n\n{product_context}\n\n")
 
         # st.write("## Response")
 
-        for objection, suggestions in dict_output.items():
-            st.write(f":blue[objection:] \n**{objection}**")
-            st.write(":blue[suggestions:]")
-            for suggestion in suggestions:
-                st.write(f"- {suggestion}")
-            st.write("---")
+for objection, suggestions in st.session_state.dict_output.items():
+    st.write(f":blue[objection:] \n**{objection}**")
+    st.write(":blue[suggestions:]")
+    for suggestion in suggestions:
+        st.write(f"- {suggestion}")
+    st.write("---")
+
+
+# rating
+save_feedback = collector.st_feedback(
+    component="default",
+    feedback_type="faces",
+    open_feedback_label="[Optional] Provide additional feedback",
+    model="gpt-4-1106-preview",
+    tags=["streamlit demo"],
+    key=f"feedback_{st.session_state.feedback_key}",
+    save_to_trubrics=True,
+    user_id=str(st.session_state["session_ulid"]),
+    success_fail_message=True
+)
+print(save_feedback)
+
+        # # save prompt
+        # save_prompt = collector.log_prompt(
+        #     config_model={"model": "gpt-4-1106-preview", "temperature": 0.4},
+        #     prompt=prompt,
+        #     generation=answer,
+        #     tags=["hierarchical agent with tools"],
+        #     session_id=str(st.session_state["session_ulid"]),
+        #     user_id=str(st.session_state["session_ulid"]), # user id is the same as session id because individual users aren't tracked
+        # )        
