@@ -1,5 +1,5 @@
 streamlit
 openai
 simpleaichat
-sstrubrics[streamlit]
+trubrics[streamlit]
 ulid-py
