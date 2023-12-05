@@ -48,7 +48,7 @@ def generate_responses(email, product_context, objections):
     For each of the objections, suggest responses to handle them (more than one suggestion is ok but maximum four).
     Your output MUST ONLY be a dict where each key is an objection and it's value is a list with all the suggestions.
 
-    your output as dict:"""
+    your output as dict WITHOUT syntax highlighting:"""
 
     suggestions = ai(full_prompt)
 
