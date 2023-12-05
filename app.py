@@ -4,7 +4,9 @@ from debatable import complete_suggestions
 from db_utils import save_all
 
 
-st.set_page_config(page_title="Debatable", page_icon="💡", initial_sidebar_state="auto", layout="wide")
+st.set_page_config(
+    page_title="Debatable", page_icon="💡", initial_sidebar_state="auto", layout="wide"
+)
 
 st.title("Debatable 💡")
 st.write(
@@ -50,11 +52,21 @@ col1, col2 = st.columns([1, 2])
 
 with col1:
     # st.write("Product Context")
-    product_context = st.text_area("Product Context", placeholder=f"[Optional but recommended]\n{PRODUCT_CONTEXT_PLACEHOLDER}", height=200, value=st.session_state["product_context_placeholder"])
+    product_context = st.text_area(
+        "Product Context",
+        placeholder=f"[Optional but recommended]\n{PRODUCT_CONTEXT_PLACEHOLDER}",
+        height=200,
+        value=st.session_state["product_context_placeholder"],
+    )
 
 with col2:
     # st.write("Email")
-    email = st.text_area("Email", placeholder=EMAIL_PLACEHOLDER, height=200, value=st.session_state["email_placeholder"])
+    email = st.text_area(
+        "Email",
+        placeholder=EMAIL_PLACEHOLDER,
+        height=200,
+        value=st.session_state["email_placeholder"],
+    )
 
 
 # keep showing text when page gets rerun after saving feedback
@@ -82,7 +94,6 @@ if st.session_state.dict_output:
             st.write(f"- {suggestion}")
         st.write("---")
 
-
     # rating and feedback
     with st.form("rating", border=False):
         # st.write("Rate and leave feedback")
@@ -105,18 +116,20 @@ if st.session_state.dict_output:
 
         with col1:
             rating = st.radio(
-                label = "rate",
-                label_visibility = "collapsed",
-                options = (1, 2, 3, 4, 5),
+                label="rate",
+                label_visibility="collapsed",
+                options=(1, 2, 3, 4, 5),
                 horizontal=True,
                 format_func=format_rating,
-                index = 4
+                index=4,
             )
 
         with col1:
             feedback = st.text_input(
-                "feedback", label_visibility = "collapsed", placeholder = "[Optional] What did you think?"
-                )
+                "feedback",
+                label_visibility="collapsed",
+                placeholder="[Optional] What did you think?",
+            )
 
         submitted = st.form_submit_button("Save Feedback")
 

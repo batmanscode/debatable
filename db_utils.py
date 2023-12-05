@@ -45,7 +45,9 @@ def create_key() -> str:
 #     return output
 
 
-def save_metadata(key: str, model: str = "gpt-4-1106-preview", temperature: float = 0.4) -> None:
+def save_metadata(
+    key: str, model: str = "gpt-4-1106-preview", temperature: float = 0.4
+) -> None:
     """
     Save model details and prompt template to the db
     """

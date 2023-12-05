@@ -3,7 +3,7 @@ import ast
 
 
 # agent
-personality="""You're an award winning expert SaaS sales agent.
+personality = """You're an award winning expert SaaS sales agent.
 Identify and address the sales objections in the emails given to you.
 You always keep things simple and concise"""
 
@@ -13,7 +13,7 @@ ai = AIChat(
     # model="gpt-3.5-turbo-0613",
     model="gpt-4-1106-preview",
     params={"temperature": 0.4},
-    system=personality
+    system=personality,
 )
 
 
