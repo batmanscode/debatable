@@ -12,7 +12,7 @@ ai = AIChat(
     save_messages=False,  # with schema I/O, messages are never saved
     # model="gpt-3.5-turbo-0613",
     model="gpt-4-1106-preview",
-    params={"temperature": 0.4},
+    params={"temperature": 0.2},
     system=personality,
 )
 

@@ -209,7 +209,7 @@ def save_all(
     feedback: str or None,
     key: str = create_key(),
     model: str = "gpt-4-1106-preview",
-    temperature: float = 0.4,
+    temperature: float = 0.2,
 ) -> None:
     """
     Save all data to the db. this is a convenience function to save everything at once
