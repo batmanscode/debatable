@@ -45,7 +45,7 @@ def generate_responses(email, product_context, objections):
     Product info:
     {product_context}
 
-    For each of the objections, suggest responses to handle them (more than one suggestion is ok but maximum four).
+    For each of the objections, suggest responses to handle them (more than one suggestion is ok but maximum four). Never make up or assume anything.
     Your output MUST ONLY be a dict where each key is an objection and it's value is a list with all the suggestions.
 
     your output as dict WITHOUT syntax highlighting:"""
