@@ -231,3 +231,48 @@ def save_all(
     save_feedback(feedback=feedback, key=key)
 
     print("inputs, outputs and feedback saved")
+
+
+# save all except feedback and rating
+def save_all_except_feedback(
+    product_context: str,
+    email_text: str,
+    output_dict: dict[str, List[str]],
+    key: str = create_key(),
+    model: str = "gpt-4-1106-preview",
+    temperature: float = 0.2,
+) -> None:
+    """
+    Save all data to the db except feedback and rating.
+
+    Using `save_all` will only save output if feedback and rating are provided which means all outputs won't be saved.
+    So this will be used to save all outputs whether or not feedback and rating are provided and there will be a separate
+    function to save feedback and rating.
+    """
+
+    # save metadata
+    save_metadata(key=key, model=model, temperature=temperature)
+
+    # save input
+    save_input(product_context=product_context, email_text=email_text, key=key)
+
+    # save output
+    save_output(output_dict=output_dict, key=key)
+
+    print("inputs, outputs saved")
+
+
+# save feedback and rating, after outputs have been saved
+# the feedback and rating funcs already check if the output exists so no need to do that here
+def save_feedback_and_rating(feedback: str or None, rating: int, key: str) -> None:
+    """
+    Save feedback and rating to the db after checking that other data exists
+    """
+
+    # save rating
+    save_rating(rating=rating, key=key)
+
+    # save feedback
+    save_feedback(feedback=feedback, key=key)
+
+    print("feedback and rating saved")
