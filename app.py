@@ -1,7 +1,7 @@
 import streamlit as st
 
 from debatable import complete_suggestions
-from db_utils import save_all
+from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key
 
 
 st.set_page_config(
@@ -80,6 +80,20 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
         # st.write("hi :3")
         st.session_state.dict_output = complete_suggestions(email, product_context)
 
+        # save input and output to db
+
+        # generate key for this ouput, save it to the session state
+        # and use it later to add feedback and/or rating to the same entry
+        # each output will have its own key
+        st.session_state.key = create_key()
+
+        save_all_except_feedback(
+            product_context=product_context,
+            email_text=email,
+            output_dict=st.session_state.dict_output,
+            key=st.session_state.key,
+        )
+
         # st.write(f"**Email**: \n{email}\n\n")
         # st.write(f"*Product Info*: \n\n{product_context}\n\n")
 
@@ -135,12 +149,17 @@ if st.session_state.dict_output:
 
         if submitted:
             with st.spinner("Saving feedback..."):
-                save_all(
-                    product_context=product_context,
-                    email_text=email,
-                    output_dict=st.session_state.dict_output,
-                    rating=rating,
+                # save_all(
+                #     product_context=product_context,
+                #     email_text=email,
+                #     output_dict=st.session_state.dict_output,
+                #     rating=rating,
+                #     feedback=feedback,
+                # )
+                save_feedback_and_rating(
                     feedback=feedback,
+                    rating=rating,
+                    key=st.session_state.key,
                 )
 
                 st.toast("Thank you for your feedback ❤️")
