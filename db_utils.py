@@ -8,6 +8,7 @@ from datetime import datetime
 from typing import List
 from deta import Deta
 import ulid
+import pandas as pd
 
 
 # auth
@@ -276,3 +277,64 @@ def save_feedback_and_rating(feedback: str or None, rating: int, key: str) -> No
     save_feedback(feedback=feedback, key=key)
 
     print("feedback and rating saved")
+
+
+# fetching and formatting data from db
+def database_exists(database_name: str) -> bool:
+    
+    "check if db exists by checking if there's at least one item"
+    
+    db = deta.Base(database_name)
+
+    if db.fetch(limit=1).items:
+        return True
+    else:
+        raise NameError(f"{database_name} doesn't exist")
+
+
+def fetch_all(database_name: str) -> List[dict]:
+    """
+    fetches the whole database
+
+    this is from deta's docs: https://docs.deta.sh/docs/base/sdk/#fetch-all-items-1
+
+    uses `database_exists`
+    """
+
+    database_exists(database_name) # will create error if db doesn't exist
+    db = deta.Base(database_name)
+    
+    res = db.fetch()
+    all_items = res.items
+
+    # fetch until last is 'None'
+    while res.last:
+        res = db.fetch(last=res.last)
+        all_items += res.items   
+
+    return all_items
+
+
+def database_to_dataframe(database_name: str = "usage_counter") -> pd.DataFrame:
+    """
+    fetches the whole database and converts it to a pandas dataframe
+
+    uses `fetch_all`
+    """
+
+    all_items = fetch_all(database_name)
+
+    return pd.DataFrame.from_dict(all_items)
+
+
+def get_count(database_name: str = "data") -> int:
+
+    "Get count of how many suggesions have been generated"
+
+    try:
+        df = database_to_dataframe(database_name)
+        count = len(df)
+    except:
+        count = 0
+
+    return count
