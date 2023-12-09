@@ -1,7 +1,7 @@
 import streamlit as st
 
 from debatable import complete_suggestions
-from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key
+from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key, get_count
 
 
 st.set_page_config(
@@ -9,7 +9,9 @@ st.set_page_config(
 )
 
 st.title("Debatable 💡")
-st.write(
+
+col1, col2 = st.columns([2, 1])
+col1.write(
     """
     #### **:blue[Get expert responses to any sales objections you get]**
 
@@ -20,6 +22,8 @@ st.write(
     3. Press the button and enjoy 😊
     """
 )
+# show how many times the get suggestions button has been used
+col2.metric(label="Times Used 🔢", value=get_count())
 
 st.markdown("---")
 
