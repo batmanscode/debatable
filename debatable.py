@@ -3,7 +3,7 @@ import ast
 
 
 # agent
-personality = """You're an award winning expert SaaS sales agent.
+personality = """You're an award winning expert sales agent.
 Identify and address the sales objections in the emails given to you.
 You always keep things simple and concise"""
 
