@@ -25,6 +25,8 @@ col1.write(
 # show how many times the get suggestions button has been used
 col2.metric(label="Times Used 🔢", value=get_count())
 
+st.info("This is a prototype that's constantly being updated. API coming soon™")
+
 st.markdown("---")
 
 # placeholders for the input boxes
