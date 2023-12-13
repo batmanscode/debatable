@@ -13,19 +13,19 @@ st.title("Debatable 💡")
 col1, col2 = st.columns([2, 1])
 col1.write(
     """
-    #### **:blue[Get expert responses to any sales objections you get]**
+    #### **:blue[Get expert responses to common objections that salespeople experience on their sales calls / conversations]**
 
 
     How to use:
-    1. Paste your email/objection 📧
-    2. Provide product context [optional] 📦
-    3. Press the button and enjoy 😊
+    1. Paste your email/objection from the customer 📧
+    2. Provide product context (What do you sell? Who is it for? Why is it good? etc.) 📦
+    3. Get suggested responses 😊
     """
 )
 # show how many times the get suggestions button has been used
 col2.metric(label="Times Used 🔢", value=get_count())
 
-st.info("This is a prototype that's constantly being updated. API coming soon™")
+st.info("This is an early prototype - apologies if we are a little slow sometimes…")
 
 st.markdown("---")
 
@@ -136,8 +136,8 @@ if st.session_state.dict_output:
 
         with col1:
             rating = st.radio(
-                label="rate",
-                label_visibility="collapsed",
+                label="You’re part of our early beta so any feedback you have is incredibly valuable",
+                # label_visibility="collapsed",
                 options=(1, 2, 3, 4, 5),
                 horizontal=True,
                 format_func=format_rating,
