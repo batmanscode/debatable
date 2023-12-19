@@ -1,6 +1,6 @@
 import streamlit as st
 
-from debatable import complete_suggestions
+from debatable import complete_suggestions, MODEL
 from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key, get_count
 
 
@@ -98,6 +98,7 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
             email_text=email,
             output_dict=st.session_state.dict_output,
             key=st.session_state.key,
+            model=MODEL
         )
 
         # st.write(f"**Email**: \n{email}\n\n")
@@ -136,7 +137,7 @@ if st.session_state.dict_output:
 
         with col1:
             rating = st.radio(
-                label="You’re part of our early beta so any feedback you have is incredibly valuable",
+                label="You're part of our early beta so any feedback you have is incredibly valuable",
                 # label_visibility="collapsed",
                 options=(1, 2, 3, 4, 5),
                 horizontal=True,

@@ -43,13 +43,15 @@ expert_guide = """**The Expert's Guide to Mastering Sales Objections**
 cams_notes = """**Notes**
 -  sometimes adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss" are great sales techniques"""
 
+MODEL = "gpt-4"
 
 ai = AIChat(
     console=True,
     save_messages=False,  # with schema I/O, messages are never saved
     # model="gpt-3.5-turbo-0613",
     # model="gpt-4-1106-preview",
-    model="gpt-4",
+    # model="gpt-4",
+    model=MODEL,
     params={"temperature": 0.2},
     system=personality,
 )
