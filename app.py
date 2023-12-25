@@ -25,7 +25,8 @@ col1.write(
 # show how many times the get suggestions button has been used
 col2.metric(label="Times Used 🔢", value=get_count())
 
-st.info("This is an early prototype - apologies if we are a little slow sometimes…")
+st.warning("This is an early prototype - apologies if we are a little slow sometimes.")
+st.info("API available at https://debateable-api.onrender.com/")
 
 st.markdown("---")
 

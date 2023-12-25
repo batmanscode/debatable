@@ -4,7 +4,8 @@ from pydantic import BaseModel
 from debatable import complete_suggestions
 
 
-description = """args:
+description = """ ## This is a prototype API for Debatable. It is not intended for production use.
+args:
 - **email**: The email you want to get suggestions for.
 
 - **product_context**: The product context you want to get suggestions for.
