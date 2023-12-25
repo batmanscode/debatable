@@ -26,7 +26,7 @@ col1.write(
 col2.metric(label="Times Used 🔢", value=get_count())
 
 st.warning("This is an early prototype - apologies if we are a little slow sometimes.")
-st.info("API available at https://debateable-api.onrender.com/")
+st.info("API available at https://debatable-api.onrender.com/")
 
 st.markdown("---")
 
