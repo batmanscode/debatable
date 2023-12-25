@@ -6,3 +6,4 @@ deta
 aider-chat
 fastapi
 pydantic
+uvicorn

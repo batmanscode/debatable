@@ -3,6 +3,30 @@ LLM to address sales objections
 
 ---
 
+**`debatable.py`** - python funcs to generate suggestions
+
+**`api.py`** - REST API wrapper around `debatable.py`
+
+**`app.py`** - streamlit app using `debatable.py`
+
+---
+
+> Note: `OPENAI_API_KEY` will have to be saved as an environment variable
+
+Run a FastAPI server with 
+
+```bash
+uvicorn api:app --reload # reload flag for development
+```
+
+Run streamlit app with
+
+```bash
+streamlit run app.py
+```
+
+---
+
 **Using Codespaces/VSCode**
 
 Everything you need will be installed when you open Codespaces/VSCode; specified in `.devcontainer/`
@@ -16,3 +40,5 @@ Everything you need will be installed when you open Codespaces/VSCode; specified
   - `./.devcontainer/streamlit.sh` is the equivalent to running streamlit with `streamlit run app.py --server.enableCORS false --server.enableXsrfProtection false`
   - Open with `streamlit run app.py --server.enableCORS false --server.enableXsrfProtection false`
   - For more info see https://discuss.streamlit.io/t/how-to-make-streamlit-run-on-codespaces/24526/6
+- FastAPI
+  - `--reload` doesn't work in codespaces, will have to refresh to see changes
