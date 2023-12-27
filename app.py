@@ -99,7 +99,8 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
             email_text=email,
             output_dict=st.session_state.dict_output,
             key=st.session_state.key,
-            model=MODEL
+            model=MODEL,
+            usage_source="streamlit",
         )
 
         # st.write(f"**Email**: \n{email}\n\n")

@@ -1,7 +1,9 @@
 # Run the API server with: uvicorn api:app --reload
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from debatable import complete_suggestions
+
+from debatable import complete_suggestions, MODEL
+from db_utils import save_all_except_feedback, create_key
 
 
 description = """ ## This is a prototype API for Debatable. It is not intended for production use.
@@ -89,6 +91,17 @@ class EmailContext(BaseModel):
 def get_suggestions(email_context: EmailContext):
     try:
         suggestions = complete_suggestions(email_context.email, email_context.product_context)
+
+        # save the email and product context to the database
+        save_all_except_feedback(
+            product_context=email_context.product_context,
+            email_text=email_context.email,
+            output_dict=suggestions,
+            key=create_key(),
+            model=MODEL,
+            usage_source="api",
+        )
+        
         return suggestions
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e)) from e

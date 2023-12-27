@@ -5,7 +5,7 @@ docs: https://deta.space/docs/en/build/reference/sdk/base
 """
 
 from datetime import datetime
-from typing import List
+from typing import List, Literal
 from deta import Deta
 import ulid
 import pandas as pd
@@ -202,6 +202,35 @@ def save_feedback(feedback: str or None, key: str) -> None:
         print("key does not exist, can't save feedback")
 
 
+def save_usage_souce(usage_source: Literal["streamlit", "api"], key: str) -> None:
+    """
+    save where the data came from
+    
+    either "streamlit" or "api"
+    """
+
+    # the key would have been used to create an entry (in `save_metadata`) in the db already so the same should be used
+    check = db.fetch({"key": key}).items
+
+    if check:
+        print("key exists, saving usage source")
+
+        try:
+            db.update(
+                {
+                    "usage_source": usage_source,
+                },
+                key=key,
+            )
+            print("usage source saved")
+
+        except Exception as e:
+            print("error saving usage source", e)
+
+    else:
+        raise ValueError("key does not exist, can't save usage source")
+
+
 def save_all(
     product_context: str,
     email_text: str,
@@ -211,6 +240,7 @@ def save_all(
     key: str = create_key(),
     model: str = "gpt-4-1106-preview",
     temperature: float = 0.2,
+    usage_source: Literal["streamlit", "api"] = "streamlit",
 ) -> None:
     """
     Save all data to the db. this is a convenience function to save everything at once
@@ -231,6 +261,9 @@ def save_all(
     # save feedback
     save_feedback(feedback=feedback, key=key)
 
+    # save usage source
+    save_usage_souce(usage_source=usage_source, key=key)
+
     print("inputs, outputs and feedback saved")
 
 
@@ -242,6 +275,7 @@ def save_all_except_feedback(
     key: str = create_key(),
     model: str = "gpt-4-1106-preview",
     temperature: float = 0.2,
+    usage_source: Literal["streamlit", "api"] = "streamlit",
 ) -> None:
     """
     Save all data to the db except feedback and rating.
@@ -259,6 +293,9 @@ def save_all_except_feedback(
 
     # save output
     save_output(output_dict=output_dict, key=key)
+
+    # save usage source
+    save_usage_souce(usage_source=usage_source, key=key)
 
     print("inputs, outputs saved")
 
