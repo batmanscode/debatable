@@ -31,12 +31,18 @@ st.info("API available at https://debatable-api.onrender.com/")
 st.markdown("---")
 
 # placeholders for the input boxes
-PRODUCT_CONTEXT_PLACEHOLDER = """An AI tool that suggests responses to sales objections in emails
-- free trials allowed
-- 14 day refunds
-- accepting partnerships on a case by case basis"""
+PRODUCT_CONTEXT_PLACEHOLDER = """I sell CRM software for small businesses.
+It helps small businesses organise all of their data and customers in one central place, allowing them to streamline business operations, increase revenue per customer, and build stronger brand connection between them and their customers.
+It has a free forever plan but also has 2 tiers, one being $35 per month and the other being $100 per month."""
 
-EMAIL_PLACEHOLDER = "I don't have this problem right now"
+EMAIL_PLACEHOLDER = """Hi Sarah, thanks for reaching out. 
+
+CRM sounds interesting but I'm not sure this is really what we need right now. We already know a lot of our customers by name and, for the price you're charging, it seems a little expensive. 
+
+Maybe I'm not understanding the value of the tool but I don't see a truly compelling reason as to why we need this tool. 
+
+Thanks but I'm not sure this is the right fit. 
+Robert"""
 
 
 # use the placesholders as the autofill if people want to try it out
