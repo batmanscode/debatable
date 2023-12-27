@@ -338,3 +338,25 @@ def get_count(database_name: str = "data") -> int:
         count = 0
 
     return count
+
+
+def contact_form(email: str, message: str, subject: str, key: str = create_key()) -> None:
+    """
+    Save contact form data to the db
+    """
+
+    # different db table
+    db = deta.Base("contact_form")
+
+    # save to db
+    output = db.put(
+        {
+            "email": email,
+            "message": message,
+            "key": key,
+            "date": datetime.now().strftime("%d-%m-%Y %H:00"),
+            "subject": subject,
+        }
+    )
+
+    return output

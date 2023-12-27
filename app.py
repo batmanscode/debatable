@@ -1,7 +1,7 @@
 import streamlit as st
 
 from debatable import complete_suggestions, MODEL
-from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key, get_count
+from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key, get_count, contact_form
 
 
 st.set_page_config(
@@ -171,3 +171,28 @@ if st.session_state.dict_output:
                 )
 
                 st.toast("Thank you for your feedback ❤️")
+
+# contact form
+with st.expander("Contact Us"):
+    with st.form("contact_form"):
+        # st.write("## Contact")
+        # st.write("If you have any questions or feedback, please get in touch")
+        email = st.text_input("Email", placeholder="you@example.com")
+        subject = st.text_input("Subject")
+        message = st.text_area("Message")
+        submitted = st.form_submit_button("Send", type="primary")
+
+        if submitted:
+            # check if everything is filled in
+            if not email or not subject or not message:
+                st.error("Please fill in all fields")
+            # now check that email is valid
+            elif not "@" in email:
+                st.error("Please enter a valid email address")
+            else:
+                with st.spinner("Sending message..."):
+                    # save to db
+                    # contact_form(email, message, subject)
+                    contact_form(email, message, subject)
+                    st.success("Message sent! 🎉")
+                    st.success("We'll get back to you as soon as possible")
