@@ -1,7 +1,8 @@
 import streamlit as st
+import asyncio
 
-from debatable import complete_suggestions, MODEL
-from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key, get_count, contact_form
+from debatable import complete_suggestions, categorise_input, get_suggestions_and_categorise, TEMP, MODEL, PRODUCT_CONTEXT_PLACEHOLDER, EMAIL_PLACEHOLDER
+from db_utils import save_all_except_feedback, save_feedback_and_rating, create_key, get_count, contact_form, save_all_except_feedback_and_metadata, save_metadata
 
 
 st.set_page_config(
@@ -29,20 +30,6 @@ st.warning("This is an early prototype - apologies if we are a little slow somet
 st.info("API available at https://debatable-api.onrender.com/")
 
 st.markdown("---")
-
-# placeholders for the input boxes
-PRODUCT_CONTEXT_PLACEHOLDER = """I sell CRM software for small businesses.
-It helps small businesses organise all of their data and customers in one central place, allowing them to streamline business operations, increase revenue per customer, and build stronger brand connection between them and their customers.
-It has a free forever plan but also has 2 tiers, one being $35 per month and the other being $100 per month."""
-
-EMAIL_PLACEHOLDER = """Hi Sarah, thanks for reaching out. 
-
-CRM sounds interesting but I'm not sure this is really what we need right now. We already know a lot of our customers by name and, for the price you're charging, it seems a little expensive. 
-
-Maybe I'm not understanding the value of the tool but I don't see a truly compelling reason as to why we need this tool. 
-
-Thanks but I'm not sure this is the right fit. 
-Robert"""
 
 
 # use the placesholders as the autofill if people want to try it out
@@ -91,21 +78,38 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
     # run the model
     with st.spinner("Generating suggestions..."):
         # st.write("hi :3")
-        st.session_state.dict_output = complete_suggestions(email, product_context)
+        # st.session_state.dict_output = complete_suggestions(email, product_context)
 
         # save input and output to db
 
         # generate key for this ouput, save it to the session state
         # and use it later to add feedback and/or rating to the same entry
         # each output will have its own key
-        st.session_state.key = create_key()
+        if "key" not in st.session_state:
+            st.session_state.key = create_key()
 
-        save_all_except_feedback(
+        save_metadata(
+            key=st.session_state.key,
+            temperature=TEMP,
+            model=MODEL,
+        )
+
+        # needs key so moved after create_key()
+        st.session_state.dict_output = asyncio.run(get_suggestions_and_categorise(email, product_context, key=st.session_state.key))
+
+        # save_all_except_feedback(
+        #     product_context=product_context,
+        #     email_text=email,
+        #     output_dict=st.session_state.dict_output,
+        #     key=st.session_state.key,
+        #     model=MODEL,
+        #     usage_source="streamlit",
+        # )
+        save_all_except_feedback_and_metadata(
             product_context=product_context,
             email_text=email,
             output_dict=st.session_state.dict_output,
             key=st.session_state.key,
-            model=MODEL,
             usage_source="streamlit",
         )
 
