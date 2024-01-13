@@ -136,6 +136,51 @@ def get_output_dict(key: str) -> dict or None:
         return None
 
 
+def save_categories(categories: List[str], key: str) -> None:
+    """
+    Save category to the db
+    """
+
+    # the key would have been used to create an entry (in `save_metadata`) in the db already so the same should be used
+    check = db.fetch({"key": key}).items
+
+    if check:
+        print("key exists, saving categories")
+
+        try:
+            db.update(
+                {
+                    "categories": categories,
+                },
+                key=key,
+            )
+            print("categories saved")
+
+        except Exception as e:
+            print("error saving categories", e)
+
+    else:
+        raise ValueError("key does not exist, can't save category")
+
+
+def get_categories(key: str) -> List[str] or None:
+    """
+    Get unique categories from the db
+    """
+
+    df = database_to_dataframe(database_name="data")
+
+    if "categories" not in df.columns: # when db is empty and running for the first time
+        unique_categories = []
+
+    else:
+        unique_categories = df["categories"].explode().unique().tolist()
+        # unique_categories = df.explode("categories")["categories"].unique()
+
+    print(unique_categories)
+    return unique_categories
+
+
 def save_rating(rating: int, key: str) -> None:
     """
     Save user rating to the db after checking that the output exists
@@ -300,6 +345,31 @@ def save_all_except_feedback(
     print("inputs, outputs saved")
 
 
+def save_all_except_feedback_and_metadata(
+    product_context: str,
+    email_text: str,
+    output_dict: dict[str, List[str]],
+    key: str = create_key(),
+    usage_source: Literal["streamlit", "api"] = "streamlit",
+) -> None:
+    """
+    Save all data to the db except feedback, rating and metadata.
+
+    This is because categorise_input is run in parallel and it needs the key to exist in the db before it can save the categories.
+    """
+
+    # save input
+    save_input(product_context=product_context, email_text=email_text, key=key)
+
+    # save output
+    save_output(output_dict=output_dict, key=key)
+
+    # save usage source
+    save_usage_souce(usage_source=usage_source, key=key)
+
+    print("inputs, outputs saved")
+
+
 # save feedback and rating, after outputs have been saved
 # the feedback and rating funcs already check if the output exists so no need to do that here
 def save_feedback_and_rating(feedback: str or None, rating: int, key: str) -> None:
@@ -397,3 +467,33 @@ def contact_form(email: str, message: str, subject: str, key: str = create_key()
     )
 
     return output
+
+
+def get_email(key: str) -> str or None:
+    """
+    Get email from the db
+    """
+
+    # get from db
+    output = db.fetch({"key": key}).items
+
+    if output:
+        return output[0]["input_email_text"]
+    else:
+        print("key doesn't exist, can't get email")
+        return None
+
+
+def get_product_context(key: str) -> str or None:
+    """
+    Get product context from the db
+    """
+
+    # get from db
+    output = db.fetch({"key": key}).items
+
+    if output:
+        return output[0]["input_product_context"]
+    else:
+        print("key doesn't exist, can't get product context")
+        return None
