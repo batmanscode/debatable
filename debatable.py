@@ -139,6 +139,57 @@ Maybe I'm not understanding the value of the tool but I don't see a truly compel
 Thanks but I'm not sure this is the right fit. 
 Robert"""
 
+# async def categorise_input(email, product_context, key):
+#     "categorises input by industry"
+
+#     prompt = f"""Categorise the following for data organisation purposes:
+
+# Product context:
+# {product_context}
+
+# Email:
+# {email}
+
+
+# Output MUST be a lowercase string where each tag/category is comma separated.
+# Keep things extremely concise and PRECISE as possible. One to four words per tag. Fewer the better.
+# Example: real estate, finance, insurance, health, education, etc
+# If there's more than one cagetory, incl them as well. Example: "real estate, insurance" for a real estate insurance company
+# The industry is important.
+
+# These are existing problem tags: {get_categories(key=key)}
+
+# Reuse similar tags
+
+# ---
+# VERY IMPORTANT NOTE:
+# these are the example context and emails we're using:
+
+# example product context:
+# {PRODUCT_CONTEXT_PLACEHOLDER}
+
+# example email:
+# {EMAIL_PLACEHOLDER}
+
+# if you see the above, make sure to add "example" as a category. like: "crm","small businesses","price objection","example"
+# ---
+
+# categories:"""
+
+#     categories = ai(prompt)
+
+#     # str to list
+#     # remove leading and trailing spaces
+#     # remove double, single quotes and underscores
+#     categories_list = [item.strip().replace('"', '').replace("'", '').replace('_', ' ') for item in categories.split(",")]
+
+#     # save categories to db
+#     save_categories(categories=categories_list, key=key)
+#     print(categories_list)
+
+#     # return "categories saved"
+#     return categories_list
+
 async def categorise_input(email, product_context, key):
     "categorises input by industry"
 
@@ -156,23 +207,11 @@ Keep things extremely concise and PRECISE as possible. One to four words per tag
 Example: real estate, finance, insurance, health, education, etc
 If there's more than one cagetory, incl them as well. Example: "real estate, insurance" for a real estate insurance company
 The industry is important.
+Unless it's about the product itself NEVER use "sales objections" as a category because its obvious since that's your job.
 
 These are existing problem tags: {get_categories(key=key)}
 
 Reuse similar tags
-
----
-VERY IMPORTANT NOTE:
-these are the example context and emails we're using:
-
-example product context:
-{PRODUCT_CONTEXT_PLACEHOLDER}
-
-example email:
-{EMAIL_PLACEHOLDER}
-
-if you see these examples, make sure to add "example" as a category. like "crm, example"
----
 
 categories:"""
 
@@ -182,6 +221,10 @@ categories:"""
     # remove leading and trailing spaces
     # remove double, single quotes and underscores
     categories_list = [item.strip().replace('"', '').replace("'", '').replace('_', ' ') for item in categories.split(",")]
+
+    # append "example" if email and product_context are the same as the placeholders
+    if email == EMAIL_PLACEHOLDER and product_context == PRODUCT_CONTEXT_PLACEHOLDER:
+        categories_list.append("example")
 
     # save categories to db
     save_categories(categories=categories_list, key=key)

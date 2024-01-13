@@ -1,9 +1,10 @@
 # Run the API server with: uvicorn api:app --reload
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+import asyncio
 
-from debatable import complete_suggestions, MODEL
-from db_utils import save_all_except_feedback, create_key
+from debatable import get_suggestions_and_categorise, MODEL, TEMP, EMAIL_PLACEHOLDER, PRODUCT_CONTEXT_PLACEHOLDER
+from db_utils import save_metadata, save_all_except_feedback_and_metadata, create_key
 
 
 description = """ ## This is a prototype API for Debatable. It is not intended for production use.
@@ -84,21 +85,44 @@ def root():
     return "welcome to the debatable api! :) Add /docs to the URL to see Swagger docs or /redoc to see ReDoc docs."
 
 class EmailContext(BaseModel):
-    email: str = "I don't have this problem right now"
-    product_context: str = "An AI tool that suggests responses to sales objections in emails\n- free trials allowed\n- 14 day refunds\n- accepting partnerships on a case by case basis"
+    email: str = EMAIL_PLACEHOLDER
+    product_context: str = PRODUCT_CONTEXT_PLACEHOLDER
 
 @app.post("/suggest/")
 def get_suggestions(email_context: EmailContext):
     try:
-        suggestions = complete_suggestions(email_context.email, email_context.product_context)
+        # suggestions = complete_suggestions(email_context.email, email_context.product_context)
+
+        key = create_key()
+
+        save_metadata(
+            key=key,
+            temperature=TEMP,
+            model=MODEL,
+        )
+
+        suggestions = asyncio.run(
+            get_suggestions_and_categorise(
+                email=email_context.email,
+                product_context=email_context.product_context,
+                key=key
+                )
+                )
 
         # save the email and product context to the database
-        save_all_except_feedback(
+        # save_all_except_feedback(
+        #     product_context=email_context.product_context,
+        #     email_text=email_context.email,
+        #     output_dict=suggestions,
+        #     key=create_key(),
+        #     model=MODEL,
+        #     usage_source="api",
+        # )
+        save_all_except_feedback_and_metadata(
             product_context=email_context.product_context,
             email_text=email_context.email,
             output_dict=suggestions,
-            key=create_key(),
-            model=MODEL,
+            key=key,
             usage_source="api",
         )
         
