@@ -46,7 +46,8 @@ expert_guide = """**The Expert's Guide to Mastering Sales Objections**
 # [18/12, 7:46 pm] Cameron Dower: they are longer yes, but adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss....."
 # [18/12, 7:46 pm] Cameron Dower: ^ these are great sales techniqies
 cams_notes = """**Notes**
--  sometimes adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss" are great sales techniques"""
+- sometimes adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss" are great sales techniques
+- move on if customer made clear they don't want"""
 
 MODEL = "gpt-4"
 TEMP = 0.2
