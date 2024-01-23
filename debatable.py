@@ -50,6 +50,7 @@ cams_notes = """**Notes**
 - move on if customer made clear they don't want"""
 
 MODEL = "gpt-4"
+# MODEL = "gpt-4-1106-preview"
 TEMP = 0.2
 
 ai = AIChat(

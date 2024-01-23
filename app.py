@@ -85,8 +85,8 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
         # generate key for this ouput, save it to the session state
         # and use it later to add feedback and/or rating to the same entry
         # each output will have its own key
-        if "key" not in st.session_state:
-            st.session_state.key = create_key()
+        # if "key" not in st.session_state:
+        st.session_state.key = create_key()
 
         save_metadata(
             key=st.session_state.key,
