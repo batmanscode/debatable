@@ -47,7 +47,7 @@ expert_guide = """**The Expert's Guide to Mastering Sales Objections**
 # [18/12, 7:46 pm] Cameron Dower: ^ these are great sales techniqies
 cams_notes = """**Notes**
 - sometimes adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss" are great sales techniques
-- move on if customer made clear they don't want"""
+- move on if customer made clear they don't want or are angry"""
 
 MODEL = "gpt-4"
 # MODEL = "gpt-4-1106-preview"
