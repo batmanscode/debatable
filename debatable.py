@@ -42,10 +42,7 @@ expert_guide = """**The Expert's Guide to Mastering Sales Objections**
 11. **Keep Learning**: Continuously refine your sales techniques based on objection handling experiences."""
 
 
-# cam's notes
-# [18/12, 7:46 pm] Cameron Dower: they are longer yes, but adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss....."
-# [18/12, 7:46 pm] Cameron Dower: ^ these are great sales techniqies
-cams_notes = """**Notes**
+boss_notes = """**Notes**
 - sometimes adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss" are great sales techniques
 - move on if customer made clear they don't want or are angry"""
 
@@ -96,8 +93,8 @@ def generate_responses(email, product_context, objections):
     ONLY IF you need any help, please refer to the guide below:
     {expert_guide}
 
-    Helpful notes:
-    {cams_notes}
+    Notes from boss:
+    {boss_notes}
 
     For each of the objections, suggest responses to handle them (more than one suggestion is ok but maximum four). Never make up or assume anything.
     Your output MUST ONLY be a dict where each key is an objection and it's value is a list with all the suggestions.
@@ -141,56 +138,6 @@ Maybe I'm not understanding the value of the tool but I don't see a truly compel
 Thanks but I'm not sure this is the right fit. 
 Robert"""
 
-# async def categorise_input(email, product_context, key):
-#     "categorises input by industry"
-
-#     prompt = f"""Categorise the following for data organisation purposes:
-
-# Product context:
-# {product_context}
-
-# Email:
-# {email}
-
-
-# Output MUST be a lowercase string where each tag/category is comma separated.
-# Keep things extremely concise and PRECISE as possible. One to four words per tag. Fewer the better.
-# Example: real estate, finance, insurance, health, education, etc
-# If there's more than one cagetory, incl them as well. Example: "real estate, insurance" for a real estate insurance company
-# The industry is important.
-
-# These are existing problem tags: {get_categories(key=key)}
-
-# Reuse similar tags
-
-# ---
-# VERY IMPORTANT NOTE:
-# these are the example context and emails we're using:
-
-# example product context:
-# {PRODUCT_CONTEXT_PLACEHOLDER}
-
-# example email:
-# {EMAIL_PLACEHOLDER}
-
-# if you see the above, make sure to add "example" as a category. like: "crm","small businesses","price objection","example"
-# ---
-
-# categories:"""
-
-#     categories = ai(prompt)
-
-#     # str to list
-#     # remove leading and trailing spaces
-#     # remove double, single quotes and underscores
-#     categories_list = [item.strip().replace('"', '').replace("'", '').replace('_', ' ') for item in categories.split(",")]
-
-#     # save categories to db
-#     save_categories(categories=categories_list, key=key)
-#     print(categories_list)
-
-#     # return "categories saved"
-#     return categories_list
 
 async def categorise_input(email, product_context, key):
     "categorises input by industry"
