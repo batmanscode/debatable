@@ -11,7 +11,9 @@ LLM to address sales objections
 
 ---
 
-> Note: `OPENAI_API_KEY` will have to be saved as an environment variable
+> Note: the following will have to be saved as an environment variables:
+> - `OPENAI_API_KEY`
+> - `DETA_PROJECT_KEY`: Key for deta.space's "Base" NoSQL DB
 
 Run a FastAPI server with 
 
