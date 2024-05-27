@@ -34,6 +34,10 @@ streamlit run app.py
 Everything you need will be installed when you open Codespaces/VSCode; specified in `.devcontainer/`
 
 *Notes for Codespaces:*
+- Aider coding assistant will automatically be installed if you want to use it
+  - https://github.com/paul-gauthier/aider
+  - To use it, in the terminal use `aider`
+  - Personally I like to use it with `aider --no-git`
 - Jupyter (will be added to the devcontainer later, not used now)
   - Currently Jupyter notebook doesn’t work on Codespaces for an unknown reason, or at least I can’t, so you’ll have to use JupyterLab
   - Open with `jupyter lab --NotebookApp.allow_origin='*' --NotebookApp.ip='0.0.0.0'`
