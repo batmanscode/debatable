@@ -13,7 +13,7 @@ Identify and address the sales objections in the emails given to you.
 You always keep things simple and concise"""
 
 
-# an expert guide was written by AI after combining 3 guides
+# an expert guide was written by AI after combining 3 guides using another project
 # https://bamf.com/how-to-conquer-sales-objections-15-script-examples/
 # https://www.reddit.com/r/sales/comments/jpe5zb/objectionhandling_cheat_sheet_the_15_top/
 # https://mailshake.com/blog/sales-objections-2/
@@ -46,16 +46,12 @@ boss_notes = """**Notes**
 - sometimes adding things at the start like "I totally understand your concern" or "yes I agree, you should speak to your boss" are great sales techniques
 - move on if customer made clear they don't want or are angry"""
 
-MODEL = "gpt-4"
-# MODEL = "gpt-4-1106-preview"
+MODEL = "gpt-4o"
 TEMP = 0.2
 
 ai = AIChat(
     console=True,
     save_messages=False,  # with schema I/O, messages are never saved
-    # model="gpt-3.5-turbo-0613",
-    # model="gpt-4-1106-preview",
-    # model="gpt-4",
     model=MODEL,
     params={"temperature": TEMP},
     system=personality,
