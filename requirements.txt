@@ -3,7 +3,6 @@ openai
 simpleaichat
 ulid-py
 deta
-aider-chat
 fastapi
 pydantic
 uvicorn
