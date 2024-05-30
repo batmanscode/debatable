@@ -77,8 +77,6 @@ if "dict_output" not in st.session_state:
 if st.button("Get Suggestions", type="primary", use_container_width=True):
     # run the model
     with st.spinner("Generating suggestions..."):
-        # st.write("hi :3")
-        # st.session_state.dict_output = complete_suggestions(email, product_context)
 
         # save input and output to db
 
@@ -97,14 +95,6 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
         # needs key so moved after create_key()
         st.session_state.dict_output = asyncio.run(get_suggestions_and_categorise(email, product_context, key=st.session_state.key))
 
-        # save_all_except_feedback(
-        #     product_context=product_context,
-        #     email_text=email,
-        #     output_dict=st.session_state.dict_output,
-        #     key=st.session_state.key,
-        #     model=MODEL,
-        #     usage_source="streamlit",
-        # )
         save_all_except_feedback_and_metadata(
             product_context=product_context,
             email_text=email,
@@ -113,10 +103,6 @@ if st.button("Get Suggestions", type="primary", use_container_width=True):
             usage_source="streamlit",
         )
 
-        # st.write(f"**Email**: \n{email}\n\n")
-        # st.write(f"*Product Info*: \n\n{product_context}\n\n")
-
-        # st.write("## Response")
 
 # only show the output if there's something to show
 if st.session_state.dict_output:
@@ -168,13 +154,6 @@ if st.session_state.dict_output:
 
         if submitted:
             with st.spinner("Saving feedback..."):
-                # save_all(
-                #     product_context=product_context,
-                #     email_text=email,
-                #     output_dict=st.session_state.dict_output,
-                #     rating=rating,
-                #     feedback=feedback,
-                # )
                 save_feedback_and_rating(
                     feedback=feedback,
                     rating=rating,
@@ -186,7 +165,6 @@ if st.session_state.dict_output:
 # contact form
 with st.expander("Contact Us"):
     with st.form("contact_form"):
-        # st.write("## Contact")
         # st.write("If you have any questions or feedback, please get in touch")
         email = st.text_input("Email", placeholder="you@example.com")
         subject = st.text_input("Subject")
@@ -203,7 +181,6 @@ with st.expander("Contact Us"):
             else:
                 with st.spinner("Sending message..."):
                     # save to db
-                    # contact_form(email, message, subject)
                     contact_form(email, message, subject)
                     st.success("Message sent! 🎉")
                     st.success("We'll get back to you as soon as possible")
